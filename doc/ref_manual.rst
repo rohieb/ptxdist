@@ -458,8 +458,13 @@ special meanings in this document.
 
 .. note:: The list of supported macros is not complete yet.
 
+.. _general_macros:
+
+General Macros
+~~~~~~~~~~~~~~
+
 targetinfo
-~~~~~~~~~~
+^^^^^^^^^^
 
 Usage:
 
@@ -478,7 +483,7 @@ should always be the first call for each *stage*. For the package
  --------------------
 
 touch
-~~~~~~
+^^^^^
 
 Usage:
 
@@ -495,7 +500,7 @@ should always be the last call for each *stage*. For the package
  finished target foo.compile
 
 clean
-~~~~~
+^^^^^
 
 Usage:
 
@@ -505,10 +510,16 @@ Usage:
 
 Removes the given directory ``<directory path>``
 
+
+Target-Install Macros
+~~~~~~~~~~~~~~~~~~~~~
+
+The following macros are most useful in the *targetinstall* stage:
+
 .. _install_copy:
 
 install_copy
-~~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 Usage:
 
@@ -608,7 +619,7 @@ Copy a file from the package install directory to the root filesystem:
  $(call install_copy, foo, 0, 0, 0755, -, /usr/bin/foo)
 
 install_tree
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 Usage:
 
@@ -664,7 +675,7 @@ If the current package is ``foo-1.0`` the base path for the directory tree
 will be ``$(PKGDIR)/foo-1.0/usr/share/bar``.
 
 install_alternative_tree
-~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Usage:
 
@@ -715,7 +726,7 @@ directory. See :ref:`install_alternative` for more details.
 .. _install_alternative:
 
 install_alternative
-~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^
 
 Usage:
 
@@ -787,7 +798,7 @@ a special configuration package. This is possibly by creating a symlink to
 PTXdist skip installing the file if it detects such a symlink.
 
 install_link
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 Usage:
 
@@ -828,7 +839,7 @@ Create a symbolic link as ``/usr/bin/foo`` pointing to ``/bin/bar``:
 .. _install_archive:
 
 install_archive
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 Usage:
 
@@ -859,7 +870,7 @@ All parameters have fixed meanings:
   to. Can be just ``/`` for root.
 
 install_glob
-~~~~~~~~~~~~
+^^^^^^^^^^^^
 
 Usage:
 
@@ -912,7 +923,7 @@ libbar.so
  $(call install_glob, foo, 0, 0, -, /usr/lib/foo, *.so, */libbar.so)
 
 install_lib
-~~~~~~~~~~~
+^^^^^^^^^^^
 
 Usage:
 
@@ -968,7 +979,7 @@ it install its content into the corresponding packages directory (in our example
 ``<platform-dir>/packages/foo-1.0.0/`` here).
 
 install_replace
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 Usage:
 
@@ -1009,10 +1020,13 @@ be installed with some other ``install_*`` command before
 
 .. _param_macros:
 
+Variable State Switches
+~~~~~~~~~~~~~~~~~~~~~~~
+
 .. _ptxEndis:
 
 ptx/endis
-~~~~~~~~~
+^^^^^^^^^
 
 To convert the state (set/unset) of a variable into an ``enable/disable``
 string use the ``ptx/endis`` macro.
@@ -1043,7 +1057,7 @@ Refer :ref:`ptxDisen` for the opposite string expansion.
 .. _ptxDisen:
 
 ptx/disen
-~~~~~~~~~
+^^^^^^^^^
 
 To convert the state (set/unset) of a variable into a ``disable/enable``
 string use the ``ptx/disen`` macro.
@@ -1072,7 +1086,7 @@ Depending on the state of FOO_VARIABLE this line results into
 Refer :ref:`ptxEndis` for the opposite string expansion.
 
 ptx/wwo
-~~~~~~~
+^^^^^^^
 
 To convert the state (set/unset) of a variable into a ``with/without``
 string use the ``ptx/wwo`` macro.
@@ -1099,7 +1113,7 @@ Depending on the state of FOO_VARIABLE this line results into
  FOO_CONF_OPT += --without-something (if FOO_VARIABLE is unset)
 
 ptx/ifdef
-~~~~~~~~~
+^^^^^^^^^
 
 To convert the state (set/unset) of a variable into one of two strings use the
 ``ptx/ifdef`` macro.
