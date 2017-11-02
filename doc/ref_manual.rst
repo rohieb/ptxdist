@@ -1294,6 +1294,18 @@ Depending on the state of FOO_VARIABLE this line results into
  FOO_CONF_OPT += --with-something=/usr (if FOO_VARIABLE is set)
  FOO_CONF_OPT += --with-something=none (if FOO_VARIABLE is unset)
 
+ptx/onoff
+^^^^^^^^^
+
+FIXME
+
+ptx/opt-dis
+^^^^^^^^^^^
+
+$(call ptx/ifdef,$(1),n,y)
+
+FIXME
+
 ptx/get-alternative
 ~~~~~~~~~~~~~~~~~~~
 
