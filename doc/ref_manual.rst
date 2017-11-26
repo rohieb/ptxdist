@@ -463,6 +463,50 @@ special meanings in this document.
 General Macros
 ~~~~~~~~~~~~~~
 
+ptx/mirror
+^^^^^^^^^^
+
+Usage:
+
+.. code-block:: make
+
+ $(call ptx/mirror, <category>, <relative-url>)
+
+Expands to a list of mirror URLs for ``<category>`` and ``<relative-url>``.
+The relative URL is the part that follows the base URL in the table below.
+
+Currently the following mirror categories are known by PTXdist:
+
++----------------+----------------------------------------------+
+| ``<category>`` | Base URL                                     |
++================+==============================================+
+| ``SF``         | http://downloads.sourceforge.net/sourceforge |
++----------------+----------------------------------------------+
+| ``DEB``        | http://ftp.debian.org/debian/                |
++----------------+----------------------------------------------+
+| ``GNU``        | https://ftp.gnu.org/gnu/                     |
++----------------+----------------------------------------------+
+| ``XORG``       | http://ftp.x.org/pub                         |
++----------------+----------------------------------------------+
+| ``KERNEL``     | https://www.kernel.org/pub/linux             |
++----------------+----------------------------------------------+
+
+.. note::
+ PTXdist sets default mirror servers for each category, but they can also be
+ configured in the submenu *Source Download* when calling ``ptxdist setup``.
+
+Example:
+
+.. code-block:: make
+
+ $(call ptx/mirror, SF, qpdf/qpdf/$(QPDF_VERSION)/$(QPDF).$(QPDF_SUFFIX))
+
+might expand to something like::
+
+ http://downloads.sourceforge.net/sourceforge/qpdf/qpdf/7.0.0/qpdf-7.0.0.tar.gz
+ https://kent.dl.sourceforge.net/project/qpdf/qpdf/7.0.0/qpdf-7.0.0.tar.gz
+ https://superb-dca2.dl.sourceforge.net/project/qpdf/qpdf/7.0.0/qpdf-7.0.0.tar.gz
+
 targetinfo
 ^^^^^^^^^^
 
@@ -515,22 +559,59 @@ Get Stage Macros
 
 Macros for the *get* stage:
 
-.. _get:
+.. _world_get:
 
-get
-~~~
+world/get
+~~~~~~~~~
 
 Usage:
 
 .. code-block:: make
- $(call get, <prefix>)
 
-Downloads a tarball from ``<prefix>_URL`` to the path ``<prefix>_SOURCE``.
-The URL parameter can specify multiple URLs separated by whitespace,
-which can be used to specify mirror URLs.
+ $(call world/get, <prefix>)
 
-Target-Install Macros
-~~~~~~~~~~~~~~~~~~~~~
+Checks for a file named ``$(<prefix>_SOURCE)`` in the source-arch-loc_.
+If it does not exist, it gets downloaded from ``$(<prefix>_URL)``.
+The URL variable can contain multiple URLs separated by whitespace,
+which can be used to specify mirror URLs. See also `ptx/mirror`_.
+
+For an example, see the section `world/check_src`_.
+
+.. _world_check_src:
+
+world/check_src
+~~~~~~~~~~~~~~~
+
+Usage:
+
+.. code-block:: make
+
+ $(call world/check_source, <prefix>)
+
+Checks the MD5sum of the file ``$(<prefix>_SOURCE)`` against ``$(<prefix>_MD5)``,
+and fails if it doesn't match.
+
+Example:
+
+.. code-block:: make
+
+ FOOBAR_SOURCE		:= $(SRCDIR)/foobar-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_URL		:= http://example.org/foobar-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_MD5		:= 68b329da9893e34099c7d8ad5cb9c940
+ FOOBAR_MOD_SOURCE	:= $(SRCDIR)/foobar-modules-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_MOD_URL		:= http://example.org/foobar-modules-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_MOD_MD5		:= d784fa8b6d98d27699781bd9a7cf19f0
+
+ $(STATEDIR)/foobar.get:
+ 	@$(call targetinfo)
+ 	@$(call world/get, FOOBAR)
+ 	@$(call world/get, FOOBAR_MOD)
+ 	@$(call world/check_src, FOOBAR)
+ 	@$(call world/check_src, FOOBAR_MOD)
+ 	@$(call touch)
+
+Target-Install Stage Macros
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following macros are most useful in the *targetinstall* stage:
 
