@@ -510,6 +510,24 @@ Usage:
 
 Removes the given directory ``<directory path>``
 
+Get Stage Macros
+~~~~~~~~~~~~~~~~
+
+Macros for the *get* stage:
+
+.. _get:
+
+get
+~~~
+
+Usage:
+
+.. code-block:: make
+ $(call get, <prefix>)
+
+Downloads a tarball from ``<prefix>_URL`` to the path ``<prefix>_SOURCE``.
+The URL parameter can specify multiple URLs separated by whitespace,
+which can be used to specify mirror URLs.
 
 Target-Install Macros
 ~~~~~~~~~~~~~~~~~~~~~
