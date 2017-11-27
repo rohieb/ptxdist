@@ -617,6 +617,53 @@ Example:
  If you want to download multiple files in the *get* stage, have a look at the
  section `Downloading Multiple Source Files`_.
 
+Extract Stage Macros
+~~~~~~~~~~~~~~~~~~~~
+
+extract
+^^^^^^^
+
+Usage:
+
+.. code-block:: make
+
+ $(call extract, <prefix>)
+
+Extracts the source archive ``$(<prefix>_SOURCE)`` to the folder
+``$(<prefix>_DIR)``.[fn_world_extract]_
+
+.. [fn_world_extract] As it operates on ``<prefix>``, this macro should better
+   be called *world/extract*, but for historic reasons it isn't.
+
+Does nothing if ``<prefix>_DIR`` is unset, or if ``$(<prefix>_URL)`` and
+``$(<prefix>_SOURCE)`` are empty.
+
+If ``$(<prefix>_URL)`` starts with ``file://``, ``$(<prefix>_DIR)`` is created
+as a symlink to ``$(<prefix>_URL)``.
+
+Have a look at the `extract Stage Default Rule`_ for an example.
+
+.. _world_patchin:
+
+world/patchin
+^^^^^^^^^^^^^
+
+Usage:
+
+.. code-block:: make
+
+ $(call world/patchin, <prefix>)
+
+Looks for a series file and patches in any of the patch folders (see `Patch
+Series`_) and applies them to the extracted source in ``$(<prefix>_DIR)``.
+If ``$(<prefix>_SERIES)`` is set, then this file is used as the series file
+instead (the patch files are still searched in any of the patch folders).
+
+Does nothing if ``$(<prefix>_URL)`` starts with ``file://``, or if
+``$(<prefix>_URL)`` and ``$(<prefix>_SOURCE)`` are empty.
+
+Have a look at the `extract Stage Default Rule`_ for an example.
+
 Target-Install Stage Macros
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
