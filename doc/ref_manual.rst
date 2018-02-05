@@ -778,7 +778,7 @@ Usage:
 
 .. code-block:: make
 
- $(call install_tree, <package>, <UID>, <GID>, <source dir>, <destination dir>)
+ $(call install_tree, <package>, <UID>, <GID>, <source dir>, <destination dir>, <strip>])
 
 Installs the whole directory tree with all files from the given directory into:
 
@@ -800,6 +800,8 @@ Some of the parameters have fixed meanings:
   be ``-`` to use the package directory of the current package instead
 **<destination dir>**
   The basename of the to-be-installed tree in the root filesystem
+**<strip>**
+  same as for install_copy.
 
 Note: This installation macro
 
