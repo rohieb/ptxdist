@@ -610,6 +610,13 @@ Example:
  	@$(call world/check_src, FOOBAR_MOD)
  	@$(call touch)
 
+.. note::
+
+ This example should illustrate the use of ``world/get`` and
+ ``world/check_src``, but it is not very idiomatic.
+ If you want to download multiple files in the *get* stage, have a look at the
+ section `Downloading Multiple Source Files`_.
+
 Target-Install Stage Macros
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1369,6 +1376,35 @@ to download the source archive and check for itsvalidity.
 
 If ``<PKG>_SOURCE`` is not set, ``<PKG>_SOURCES`` will be empty,
 so the *get* stage will download nothing.
+
+This mechanism is flexible enough that it can be used for multiple archives:
+
+Downloading Multiple Source Files
+'''''''''''''''''''''''''''''''''
+
+Indeed, you can specify multiple source archives in this variable, which then
+get downloaded all together in the default *get* stage. To do this, simply
+override ``<PKG>_SOURCES`` in your ``rules/<pkg>.make``, and provide the
+backreference from the source archive to the package prefix. Here is an
+example for an imaginary package *foobar*:
+
+.. code-block:: make
+
+ FOOBAR_SOURCE		:= $(SRCDIR)/foobar-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_URL		:= http://example.org/foobar-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_MD5		:= 68b329da9893e34099c7d8ad5cb9c940
+ FOOBAR_MOD_SOURCE	:= $(SRCDIR)/foobar-modules-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_MOD_URL		:= http://example.org/foobar-modules-$(FOOBAR_VERSION).tar.gz
+ FOOBAR_MOD_MD5		:= d784fa8b6d98d27699781bd9a7cf19f0
+ 
+ # We want to download multiple sources:
+ $(FOOBAR_SOURCE)	:= FOOBAR
+ $(FOOBAR_MOD_SOURCE)	:= FOOBAR_MOD
+ FOOBAR_SOURCES		:= $(FOOBAR_SOURCE) $(FOOBAR_MOD__SOURCE)
+
+This way the default *get* stage can be used to download multiple source
+archives, but you will still need to extract them separately in the *extract*
+stage.
 
 extract Stage Default Rule
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
