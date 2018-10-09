@@ -1329,27 +1329,46 @@ instead.
   this stage!
   In this case the default stage rule is used instead.
 
+.. note::
+
+  In the following examples, ``<pkg>`` will be used as a placeholder for the
+  lowercase package name, and ``<PKG>`` will be used as a placeholder for the
+  uppercase package name.
+
 get Stage Default Rule
 ^^^^^^^^^^^^^^^^^^^^^^
 
-If the *get* stage is omitted, PTXdist runs instead:
+If the *get* stage is omitted, PTXdist generates these two default make
+targets:
 
 .. code-block:: make
 
-    $(STATEDIR)/<pkg>.get:
+    $(STATEDIR)/<pkg>.get: | $(<PKG>_SOURCES)
+
+    $(SRCDIR)/%:
     	@$(call targetinfo)
-    	@$(call touch)
+    	@$(call get, $($@))
 
-Which means this step is skipped.
+To understand this stage fully, we'll need to take a short detour:
 
-If the package is an archive that must be downloaded from the web, the
-following rule must exist in this case:
+At the beginning of the build process, PTXdist looks at the definitions of all
+selected packages and generates two files named
+``|ptxdistPlatformDir|/state/ptx_dgen_deps.pre`` and
+``|ptxdistPlatformDir|/state/ptx_dgen_deps.post``. The variable
+``<PKG>_SOURCES`` is defined in the first file to the same value as
+``<PKG>_SOURCE``, i.e. the location of the downloaded source archive (see
+`Package Definition`_).  So the first rule above makes the *get* stage
+dependant on all the package's source archives.
 
-.. code-block:: make
+Additionally, ``ptx_dgen_deps.post`` contains the backreference
+``$(<PKG>_SOURCE) := <PKG>``, which is used in the second rule above to
+download the actual source archive (note the double expansion of ``$($@)``!).
+This is done with the get_ macro, which in turn uses the variables
+``<PKG>_SOURCE``, ``<PKG>_URL`` and ``<PKG>_MD5`` from the package definition
+to download the source archive and check for itsvalidity.
 
-    $(<PKG>_SOURCE):
-    	@$(call targetinfo)
-    	@$(call get, <PKG>)
+If ``<PKG>_SOURCE`` is not set, ``<PKG>_SOURCES`` will be empty,
+so the *get* stage will download nothing.
 
 extract Stage Default Rule
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
