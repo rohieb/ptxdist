@@ -12,8 +12,8 @@ there should be good reasons for different choices.
 How to Contribute
 ~~~~~~~~~~~~~~~~~
 
-Contributions should be sent as patches to the :ref:`PTXdist mailing list`. This
-is usually done with ``git send-email``.
+Contributions should be sent as patches to the :ref:`PTXdist mailing list
+<ptxdist_mailing_list>`. This is usually done with ``git send-email``.
 
 All patches must contain a descriptive subject and should, for all
 non-obvious changes, contain a commit message describing what has changed
