@@ -21,7 +21,12 @@ LIBTRACEFS_SUFFIX	:= tar.xz
 LIBTRACEFS_URL		:= https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git;tag=libtracefs-$(LIBTRACEFS_VERSION)
 LIBTRACEFS_SOURCE	:= $(SRCDIR)/$(LIBTRACEFS).$(LIBTRACEFS_SUFFIX)
 LIBTRACEFS_DIR		:= $(BUILDDIR)/$(LIBTRACEFS)
-LIBTRACEFS_LICENSE	:= LGPL-2.1 + GPL-2.0
+LIBTRACEFS_LICENSE	:= LGPL-2.1-only AND GPL-3.0-or-later WITH custom-exception
+LIBTRACEFS_LICENSE_FILES	:= \
+	file://src/tracefs-utils.c;startline=0;endline=8;md5=c6bedd276596b669012b69e9317ffade \
+	file://src/sqlhist.tab.c;startline=3;endline=32;md5=67ac50d80b3ebb72edad40dafe30d75e \
+	file://LICENSES/LGPL-2.1;md5=b370887980db5dd40659b50909238dbd
+# note: source includes a LICENSES/GPL-2.0, but it's only used in build scripts
 
 # ----------------------------------------------------------------------------
 # Prepare
